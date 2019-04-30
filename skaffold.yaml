@@ -1,0 +1,30 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  artifacts:
+  - image: changeme
+    context: .
+    docker: {}
+  tagPolicy:
+    envTemplate:
+      template: '{{.DOCKER_REGISTRY}}/nuxeo-sandbox/jenkinsx-builder-maven-java11-nuxeo:{{.VERSION}}'
+  local: {}
+deploy:
+  kubectl: {}
+profiles:
+- name: dev
+  build:
+    artifacts:
+    - docker: {}
+    tagPolicy:
+      envTemplate:
+        template: '{{.DOCKER_REGISTRY}}/nuxeo-sandbox/jenkinsx-builder-maven-java11-nuxeo:{{.DIGEST_HEX}}'
+    local: {}
+  deploy:
+    helm:
+      releases:
+      - name: jenkinsx-builder-maven-java11-nuxeo
+        chartPath: charts/jenkinsx-builder-maven-java11-nuxeo
+        setValueTemplates:
+          image.repository: '{{.DOCKER_REGISTRY}}/nuxeo-sandbox/jenkinsx-builder-maven-java11-nuxeo'
+          image.tag: '{{.DIGEST_HEX}}'
