@@ -29,7 +29,7 @@ jenkins:
             RequestMemory: "128Mi"
             Args: '${computer.jnlpmac} ${computer.name}'
           maven-nuxeo:
-            Image: 10.19.250.70:5000/nuxeo-sandbox/builder-maven-nuxeo 
+            Image: $DOCKER_REGISTRY/nuxeo-sandbox/builder-maven-nuxeo 
             Privileged: true
             RequestCpu: "500m"
             RequestMemory: "2048Mi"
